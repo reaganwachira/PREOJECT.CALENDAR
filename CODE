@@ -1,0 +1,83 @@
+// Define event data
+const events = [
+  {
+    title: "Conference",
+    date: new Date(2023, 7, 25),
+    location: "Convention Center",
+    attendees: ["John", "Alice", "Michael"]
+  },
+  {
+    title: "Workshop",
+    date: new Date(2023, 9, 28),
+    location: "Meeting Room 2",
+    attendees: ["Emily", "David", "Sophia"]
+  },
+  {
+    title: "Team Lunch",
+    date: new Date(2023, 10, 11),
+    location: "Cafeteria",
+    attendees: ["Daniel", "Olivia", "Emma", "William"]
+  }
+];
+
+// Calculate the date 7 days from now
+const nextWeekDate = new Date();
+nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+
+// Filter events happening in the next 7 days
+const upcomingEvents = events.filter(event => event.date <= nextWeekDate);
+
+// Add formatted date to event object
+function addFormattedDate(event) {
+  const formattedDate = `${event.date.getMonth() + 1}/${event.date.getDate()}/${event.date.getFullYear()}`;
+  return { ...event, formattedDate };
+}
+
+// Update events array with formatted dates
+const eventsWithFormattedDate = upcomingEvents.map(addFormattedDate);
+
+// Convert the events array to JSON string
+const jsonString = JSON.stringify(eventsWithFormattedDate, null, 2);
+console.log("Upcoming Events in the next 7 days:\n", jsonString);
+
+// Add attendee to an event
+function addAttendeeToEvent(eventTitle, attendeeName) {
+  const event = events.find(event => event.title === eventTitle);
+  if (event) {
+    event.attendees.push(attendeeName);
+    console.log(`${attendeeName} has been added to the ${eventTitle} event.`);
+  } else {
+    console.log(`Event with title ${eventTitle} not found.`);
+  }
+}
+
+// Example usage
+addAttendeeToEvent("Conference", "Sarah");
+addAttendeeToEvent("Workshop", "Alex");
+
+// Delete an event by title
+function deleteEventByTitle(eventTitle) {
+  const index = events.findIndex(event => event.title === eventTitle);
+  if (index !== -1) {
+    events.splice(index, 1);
+    console.log(`${eventTitle} event has been deleted.`);
+  } else {
+    console.log(`Event with title ${eventTitle} not found.`);
+  }
+}
+
+// Example usage
+deleteEventByTitle("Conference");
+
+// Find the event with the most attendees
+const eventWithMostAttendees = events.reduce((maxEvent, event) => {
+  return event.attendees.length > maxEvent.attendees.length ? event : maxEvent;
+}, events[0]);
+
+console.log("Event with the most attendees:", eventWithMostAttendees);
+
+// Log event titles and formatted dates
+console.log("Event titles and dates:");
+eventsWithFormattedDate.forEach(event => {
+  console.log(`Title: ${event.title}, Date: ${event.formattedDate}`);
+});
